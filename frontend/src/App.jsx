@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { http } from "./utils";
 import { FaBox, FaCheckCircle, FaExclamationCircle, FaSpinner, FaUndo } from "react-icons/fa";
-import Confirmation from "./assets/Confirm";
+import Confirmation from "./Confirm";
 
 function Loading() {
   return (
