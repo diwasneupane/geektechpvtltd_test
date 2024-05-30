@@ -3,6 +3,8 @@ const {
   findProducts,
   getAllProducts,
 } = require("./utils");
+
+const { courierCharges } = require("./data");
 const express = require("express");
 const cors = require("cors");
 
@@ -42,9 +44,12 @@ app.post("/place-order", async (req, res) => {
 
     // Try to place the product in an existing package
     for (let i = 0; i < packages.length; i++) {
+      const maxWeight =
+        courierCharges[courierCharges.length - 1].weight_range[1];
+      const maxPrice = 250;
       if (
-        packages[i].totalAmount + product.price <= 250 &&
-        packages[i].weight + product.weight < 5000
+        packages[i].totalAmount + product.price <= maxPrice &&
+        packages[i].weight + product.weight < maxWeight
       ) {
         packages[i].totalAmount += product.price;
         packages[i].weight += product.weight;

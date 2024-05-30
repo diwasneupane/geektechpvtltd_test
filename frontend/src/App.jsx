@@ -3,6 +3,7 @@ import { http } from "./utils";
 import { FaBox, FaCheckCircle, FaExclamationCircle, FaSpinner, FaUndo } from "react-icons/fa";
 import Confirmation from "./Confirm";
 
+// Component for showing a loading spinner
 function Loading() {
   return (
     <div className="flex justify-center items-center h-screen">
@@ -11,6 +12,7 @@ function Loading() {
   );
 }
 
+// Component for displaying an error message
 function Error({ message }) {
   return (
     <div className="text-center text-red-500 mt-4">
@@ -20,6 +22,7 @@ function Error({ message }) {
   );
 }
 
+// Component for displaying the order summary
 function OrderSuccessful({ packages }) {
   return (
     <div className="p-4 w-full">
@@ -27,7 +30,10 @@ function OrderSuccessful({ packages }) {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {packages.map((package_, index) => (
           <div key={index} className="p-4 border border-gray-300 rounded shadow-md bg-white">
-            <h3 className="text-lg font-semibold text-green-500"><FaBox className="inline-block mr-2" />Package {index + 1}</h3>
+            <h3 className="text-lg font-semibold text-green-500">
+              <FaBox className="inline-block mr-2" />
+              Package {index + 1}
+            </h3>
             <p className="mt-2"><span className="font-semibold">Items:</span> {package_.products.map(product => product.name).join(', ')}</p>
             <p className="mt-2"><span className="font-semibold">Total weight:</span> {package_.weight}g</p>
             <p className="mt-2"><span className="font-semibold">Total price:</span> ${package_.totalAmount}</p>
@@ -40,6 +46,7 @@ function OrderSuccessful({ packages }) {
 }
 
 export default function App() {
+  // State variables
   const [products, setProducts] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -48,6 +55,7 @@ export default function App() {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [confirmationMessage, setConfirmationMessage] = useState("");
 
+  // Function to fetch the products from the server
   const getProducts = async () => {
     setLoading(true);
     setError(null);
@@ -63,15 +71,18 @@ export default function App() {
     }
   };
 
+  // Fetch products when the component mounts
   useEffect(() => {
     getProducts();
   }, []);
 
+  // Function to handle order confirmation
   const confirmOrder = () => {
     setConfirmationMessage("Are you sure you want to place the order?");
     setShowConfirmation(true);
   };
 
+  // Function to handle order placement after confirmation
   const handleConfirmation = async () => {
     try {
       const response = await http("/place-order", {
@@ -85,10 +96,12 @@ export default function App() {
     }
   };
 
+  // Function to cancel the order confirmation
   const cancelConfirmation = () => {
     setShowConfirmation(false);
   };
 
+  // Function to handle product selection and deselection
   const handleProductSelection = (productId, isSelected) => {
     setSelectedProducts((prevSelectedProducts) =>
       isSelected
@@ -97,6 +110,7 @@ export default function App() {
     );
   };
 
+  // Function to reset the selected products and packages
   const resetOrderDetails = () => {
     setSelectedProducts([]);
     setPackages([]);
